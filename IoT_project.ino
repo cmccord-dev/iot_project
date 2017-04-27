@@ -79,12 +79,12 @@ void loop() {
     }
     if(bt.available()) Serial.write(bt.read());
     return;*/
-
+/*
   // PIR sensor stuff
   if (pirval == HIGH) {                     // check if the input is HIGH
     Serial.println("Motion detected!");     // Announce on serial monitor
     bt.println("Motion detected!");          // send the alert through bluetooth
-  }
+  }*/
 
   // Doorbell is pressed? If it is, the buttonState is HIGH:
   if (buttonState == HIGH) {
