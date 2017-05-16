@@ -5,6 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link href="styles/layout.css" rel="stylesheet" type="text/css" media="all">
+<script src="index.js"></script>
 </head>
 <body id="top">
 <div class="wrapper row0">
@@ -23,19 +24,19 @@
   <div class="overlay">
     <section id="pageintro" class="clear"> 
       <ul class="nospace group services">
-        <li class="one_third first">
+        <li class="one_third first" onclick="openDoor()">
           <article class="overlay"><a href="#"><i class="fa fa-check-square-o"></i></a>
             <h6 class="heading">Open the door</h6>
             <p>Remotely open the lock by pressing this button</p>
           </article>
         </li>
-        <li class="one_third">
+        <li class="one_third" onclick="deactivateAlarm()">
           <article class="overlay"><a href="#"><i class="fa fa-bell-slash-o"></i></a>
             <h6 class="heading">Turn off the alarm</h6>
             <p>Turn off the burglar alarm by pressing this button</p>
           </article>
         </li>
-        <li class="one_third">
+        <li class="one_third" onclick="activateAlarm()">
           <article class="overlay"><a href="#"><i class="fa fa-archive"></i></a>
             <h6 class="heading">Lock the door</h6>
             <p>Remotely open the lock by pressing this button</p>
@@ -44,6 +45,7 @@
       </ul>
     </section>
 	</p> Door Status: Open </p>
+	<p id="alarmSection"></p>
   </div>
 </div>
 </body>
