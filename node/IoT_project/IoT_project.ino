@@ -5,8 +5,8 @@ Servo myservo;
 // constants used here to set pin numbers:
 const int buttonPin = 2;      // pushbutton pin
 const int ledPin =  13;       // LED pin
-const int pirPin = 3;         // PIR sensor
-const int pirPin2 = 4;        // PIR2 sensor (inside the door)
+const int pirPin = 4;         // PIR sensor
+const int pirPin2 = 3;        // PIR2 sensor (inside the door)
 const int buzzerPin = 6;      // buzzerPin
 const int btTX = 8;
 const int btRX = 7;
@@ -41,12 +41,13 @@ void setup() {
   }
 }
 unsigned long t;
+bool  d = false;
+bool b = false;
 void loop() {
   // read the state of the pushbutton value:
   buttonState = digitalRead(buttonPin);
   pirval = digitalRead(pirPin);
   pirval2 = digitalRead(pirPin2);
-
 
   if (bt.available()) {        // if data is available to read
     //{;}
@@ -54,24 +55,35 @@ void loop() {
 
     if (val == '1')  {            // if '1' was received turn servo 180deg to open lock
       alarm = 0;
+      analogWrite(buzzerPin, 200);
       myservo.write(180);           // turn servo to 180 deg
       Serial.println("Lock open");
+      delay (2000);
+      analogWrite(buzzerPin, 255);
+      myservo.write(90);           // turn servo to 90 deg
     }
 
     if (val == '0')  {           // if '0' was received turn servo to 90deg to lock the lock
       myservo.write(90);        // turn servo to 90 deg
-      Serial.println("Door is now locked");
+      Serial.println("Door is now locked, System Armed");
+      bt.println("Door is now locked, System Armed");
       alarm = 1;
     }
     if (val == '2')  {                      // if '2' was received turn off the buzzer
-      digitalWrite(buzzerPin, LOW);        // turn off the alarm
+      analogWrite(buzzerPin, 255);        // turn off the alarm
       Serial.println("Alarm deactivated");
+      bt.println("Alarm deactivated");
+      d = false;
     }
   }
   if (alarm == 1 && pirval2 == HIGH)  {
-    digitalWrite(buzzerPin, HIGH);
-    bt.println("ALARM!");
-    Serial.println("ALARM!");
+    analogWrite(buzzerPin, 5);
+    if (d == false) {
+      analogWrite(buzzerPin, 5);
+      bt.println("ALARM!");
+      Serial.println("ALARM!");
+    }
+    d = true;
   }
 
   /* if(t-millis()>500){t=millis();
@@ -79,18 +91,22 @@ void loop() {
     }
     if(bt.available()) Serial.write(bt.read());
     return;*/
-/*
-  // PIR sensor stuff
-  if (pirval == HIGH) {                     // check if the input is HIGH
-    Serial.println("Motion detected!");     // Announce on serial monitor
-    bt.println("Motion detected!");          // send the alert through bluetooth
-  }*/
+  /*
+    // PIR sensor stuff
+    if (pirval == HIGH) {                     // check if the input is HIGH
+      Serial.println("Motion detected!");     // Announce on serial monitor
+      bt.println("Motion detected!");          // send the alert through bluetooth
+    }*/
 
   // Doorbell is pressed? If it is, the buttonState is HIGH:
   if (buttonState == HIGH) {
-    Serial.println("DING DONG MOTHERFUCKER!");
-    bt.println("Doorbell");
+    if (b == false) {
+      Serial.println("DING DONG MOTHERFUCKER!");
+      bt.println("Doorbell");
+    }
+    b = true;
+
   } else {
-    digitalWrite(buzzerPin, HIGH);
+    //digitalWrite(buzzerPin, HIGH);
   }
 }
